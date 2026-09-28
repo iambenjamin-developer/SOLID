@@ -1,0 +1,70 @@
+@baseUrl = https://localhost:7080
+
+### Search catalog
+GET {{baseUrl}}/api/catalog/products?search=zapatilla&page=1&pageSize=10
+
+### Get product by slug
+GET {{baseUrl}}/api/catalog/products/zapatilla-running-nino
+
+### Create product (admin)
+POST {{baseUrl}}/api/admin/products
+Content-Type: application/json
+
+{
+  "name": "Campera Rompeviento Unisex",
+  "description": "Liviana, impermeable y con capucha desmontable.",
+  "sku": "CAM-RV-001",
+  "price": 74999,
+  "stock": 15
+}
+
+### Create product with invalid data (400 with errors)
+POST {{baseUrl}}/api/admin/products
+Content-Type: application/json
+
+{
+  "name": "",
+  "sku": "bad sku!",
+  "price": -10,
+  "stock": 5
+}
+
+### Update stock (admin)
+PATCH {{baseUrl}}/api/admin/products/1/stock
+Content-Type: application/json
+
+{
+  "stock": 50
+}
+
+### Available payment methods
+GET {{baseUrl}}/api/payments/methods
+
+### Create order with MercadoPago (refundable)
+POST {{baseUrl}}/api/orders
+Content-Type: application/json
+
+{
+  "paymentMethod": "mercadopago",
+  "items": [
+    { "productId": 1, "quantity": 1 },
+    { "productId": 2, "quantity": 2 }
+  ]
+}
+
+### Create order with cash on delivery (NOT refundable)
+POST {{baseUrl}}/api/orders
+Content-Type: application/json
+
+{
+  "paymentMethod": "cash-on-delivery",
+  "items": [
+    { "productId": 3, "quantity": 1 }
+  ]
+}
+
+### Get order
+GET {{baseUrl}}/api/orders/1
+
+### Cancel order
+POST {{baseUrl}}/api/orders/1/cancel
